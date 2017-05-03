@@ -1,0 +1,189 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+ /**
+  * Desktop styling
+  */
+
+ .belv-desk-month th {
+    padding: 3px;
+	background-color: #3498DB;
+	color: #FFF;
+	text-shadow: 1px 1px #000;
+	border: 2px;
+	text-align: center;
+}
+
+.belv-desk-days th {
+	padding: 0;
+	height: 30px;
+	background-color: #2980B9;
+	text-shadow: 1px 1px #000;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid #efefef;
+	width: 14.289%;
+    color: #FFF;
+}
+
+.belv-desk-cell td {
+    height: 100px;
+    padding: 2px;
+}
+
+.belv-desk-blank {
+	background-color: #f2f2f2;
+}
+
+.belv-current-month {
+	font-size: large;
+}
+
+.belv-next-month:hover, .belv-previous-month:hover {
+	cursor: pointer;
+	text-decoration: underline;
+	/*color: #2C3E52;*/
+}
+
+#belv-desk-calendar p {
+    font-size: 12px;
+}
+
+ /**
+  * Mobile styling
+  */
+#belv-mobile-calendar {
+    border: 0px;
+}
+
+#belv-mobile-calendar td {
+    vertical-align: middle;
+    border-left: 0;
+    border-right:0;
+    border-top: 1px solid lightgrey;
+    border-bottom: 0;
+    /* padding: 15px 10px 15px 10px; */
+}
+
+.mobile-calendar-hr hr {
+    margin: 0px 0;
+}
+
+.image {
+    position: relative;
+    float: left;
+    width: 110px;
+ }
+
+.month {
+    position: absolute;
+    text-align: center;
+    bottom: 80px;
+    font-size: 125%;
+    width: 100%;
+    font-family: sans-serif;
+    color: #ECF0F1;
+    padding: 0px;
+    margin: 0px;
+    font-weight: 500;
+}
+
+.date {
+    position: absolute;
+    text-align: center;
+    top: 32px;
+    width: 100%;
+    font-size: 380%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #2C3E52;
+    padding: 0px;
+    margin: 0px;
+}
+
+.day {
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 84px;
+    width: 100%;
+    font-size: 130%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #2C3E52;
+    padding: 0px;
+    margin: 0px;
+}
+.mobile-calendar-time{
+    font-size: 16px;
+}
+
+.mobile-calendar-event{
+    font-size: 16px;
+}
+
+.calendar td {
+	margin: 0px;
+	padding: 0px;
+}
+
+.calendar-days {
+	text-align:center;
+}
+
+@media screen and (min-width: 901px) {
+	#belv-mobile-calendar{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	#belv-desk-calendar{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.image {
+		width:100px;
+	}
+	.date {
+		font-size: 350%;
+		top: 30px;
+	}
+	.month {
+		font-size: 110%;
+		bottom: 74px;
+	}
+	.day{
+		font-size: 120%;
+		top: 78px;
+	}
+}
+
+@media screen and (max-width: 385px) {
+	.mobile-calendar-time {
+    	font-size: 14px;
+	}
+	.mobile-calendar-event {
+    	font-size: 14px;
+	}
+	#belv-mobile-calendar td {
+    	padding: 10px 4px 10px 4px;
+	}
+	.image {
+		width:80px;
+	}
+	.date {
+		font-size: 260%;
+		top: 32%;
+	}
+	.month {
+		font-size: 100%;
+		bottom: 74%;
+	}
+	.day{
+		font-size: 90%;
+		top: 78%;
+	}
+}
