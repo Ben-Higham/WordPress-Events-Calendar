@@ -63,7 +63,15 @@
                 <td><input type="text" name="event_link" id="event-link" class="regular-text"/></td>
             </tr>
         </table>
+        <div id="add-event-button">
         <?php submit_button('Add New Event', 'primary', 'save-event'); ?>
+        </div>
+        <div id="edit-event-buttons" style="display: none;">
+        <p class="submit">
+            <input type="submit" name="save-changes-event" id="save-changes-event" class="button button-primary" value="Save Changes">
+            <input type="submit" name="cancel-changes-event" id="cancel-changes-event" class="button delete" value="Cancel Changes">
+            </p>
+        </div>
     </div>
     <hr>
     <h2>Existing Events</h2>

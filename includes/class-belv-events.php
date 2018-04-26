@@ -201,6 +201,10 @@ class Belv_Events {
 		$this->loader->add_action( 'wp_ajax_nopriv_belv_get_months_events', $plugin_data, 'belv_get_months_events' );
 		$this->loader->add_action( 'wp_ajax_belv_get_months_events', $plugin_data, 'belv_get_months_events' );
 
+		// Add Update data function
+		$this->loader->add_action( 'wp_ajax_nopriv_belv_update_event', $plugin_data, 'belv_update_event' );
+		$this->loader->add_action( 'wp_ajax_belv_update_event', $plugin_data, 'belv_update_event' );
+
 		$this->loader->add_action( 'rest_api_init', $plugin_rest_api, 'belv_events_register_routes' );
 
 	}

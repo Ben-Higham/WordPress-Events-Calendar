@@ -14,7 +14,7 @@
  */
 
 /**
- * The REST API class.
+ * The Data class.
  *
  * This is used to define 
  * 
@@ -43,9 +43,9 @@ class Belv_Events_Data {
     public function belv_get_months_events( $params ) {
         global $wpdb;
         
-        $year = $params[year];
-		$month = $params[month];
-            
+        $year = $params['year'];
+		$month = $params['month'];
+        
         $table_name = $wpdb->prefix . 'belv_calendar';
 		$sql_query = "SELECT * FROM $table_name where month(date) = $month AND year(date) = $year";
             
@@ -66,23 +66,67 @@ class Belv_Events_Data {
         $date = $_POST['date'];
         $time = $_POST['time'];
         $link = $_POST['link'];
-
-		$table_data = array(
-			'title' => 'Test',
-			'date' => '2016/08/01',
-			'time' => '10:00am',
-			'link' => 'Test',
-		);
 		
 		$table_name = $wpdb->prefix . 'belv_calendar';
 
-		$wpdb->insert('xs_belv_calendar',
+		$wpdb->insert($table_name,
 			array(
                 'title' => $title,
                 'date' => $date,
                 'time' => $time,
                 'link' => $link
             )
+		);
+
+	}
+
+	public function belv_update_event(){
+
+		check_ajax_referer('calendar_nonce');
+
+		global $wpdb;
+		
+		$id = $_POST['id'];
+		$title = $_POST['title'];
+        $date = $_POST['date'];
+        $time = $_POST['time'];
+		$link = $_POST['link'];
+		
+		$table_name = $wpdb->prefix . 'belv_calendar';
+
+		$wpdb->update( $table_name,
+			array(
+                'title' => $title,
+                'date' => $date,
+                'time' => $time,
+                'link' => $link
+            ),
+			array( 'id' => $id )
+		);
+
+	}
+
+	public function belv_remove_event(){
+		
+		global $wpdb;
+
+		$id = $_POST['id'];
+		$title = $_POST['title'];
+        $date = $_POST['date'];
+        $time = $_POST['time'];
+		$link = $_POST['link'];
+
+		$table_name = $wpdb->prefix . 'belv_calendar';
+
+		$wpdb->delete( $table_name,
+			array(
+				'id' => $id,
+				'title' => $title,
+				'date' => $date,
+				'time' => $time,
+				'link' => $link
+			)
+
 		);
 
 	}

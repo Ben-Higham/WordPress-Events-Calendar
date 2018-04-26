@@ -61,7 +61,5 @@ class Belv_Events_Rest_Controller {
 
     }
 
-
-
 }
 ?>

@@ -42,7 +42,7 @@ jQuery(document).ready(function($) {
 		jQuery( ".datepicker" ).datepicker();
 	});
 
-	currentMonth = (new Date().getMonth()) + 1;
+	currentMonth = (new Date().getMonth());
 	currentYear = new Date().getFullYear();
 
 	// Sets month to the current month
@@ -53,7 +53,6 @@ jQuery(document).ready(function($) {
 
 	// Get events from current month
 	getEvent($, currentMonth, currentYear);
-	console.log(currentMonth);
 
 	$("#previous-month").click(function() {
 		jQuery('#belv-calendar-events').html(spinnerHtml());
@@ -93,13 +92,12 @@ function spinnerHtml(){
 }
 
 function setCurrentMonth($, month, year){
-	$('#month-title').html(monthNames[month - 1] + " " + year);
+	$('#month-title').html(monthNames[month] + " " + year);
 }
 
 function saveNewEvent($) {
 	$('#save-event').on('click', function() {
 
-		console.log('Save event');
 		// Get date from UI
 		var dateArray = $('#event-date').val().split('/');
 		var event_date = dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
@@ -136,8 +134,8 @@ function saveNewEvent($) {
 
 // Loads the events from the database for the month and year arguments
 function getEvent($, month, year) {
-	
-	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + month + "/" + year;
+	console.log(month);
+	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	jQuery.get( url, function( response ) {
 			updateContent(response)
 		}
@@ -171,75 +169,145 @@ function updateContent(response) {
 		}
 		
 		jQuery('#belv-calendar-events').html(bodyContent);
-				
-		jQuery('.edit-link').click( function() {
-			var row = jQuery(this).closest("tr");
-			var id = row.attr("id");
 
-			var title = row.find('td:eq(0)').html();
-			var date = row.find('td:eq(1)').html();
-			var hour = row.find('td:eq(2)').html().substring(0, 2);
-			var minute = row.find('td:eq(2)').html().substring(3, 5);
-			var time = row.find('td:eq(2)').html().substring(5, 7);
-			var link = row.find('td:eq(3)').html();
-
-			jQuery('#event-title').val(title);
-			jQuery('#event-date').val(date);
-			jQuery('#event-hour').val(hour);
-			jQuery('#event-minute').val(minute);
-			jQuery('#event-time').val(time);
-			jQuery('#event-link').val(link);
-			console.log("Edit entry");
-		});
-
-		jQuery('.delete-link').click( function() {
-			var row = jQuery(this).closest("tr");
-			var id = row.attr("id");
-			var title = row.find('td:eq(0)').html();
-			var date = row.find('td:eq(1)').html();
-			var deleted = confirm("Are you sure you want to delete the event " + title + " on " + date);
-			if(deleted == true){
-				console.log("Delete something: " + id);
-			}
-		});	
+		editLink();
+		
+		deleteLink();
 	}
+}
 
-	function sortEvents(events){
+function editLink(){
+	jQuery('.edit-link').click( function() {
+		var row = jQuery(this).closest("tr");
+		var id = row.attr("id").split('-')[1];
+		var title = row.find('td:eq(0)').html();
+		var date = row.find('td:eq(1)').html();
+		var hour = row.find('td:eq(2)').html().substring(0, 2);
+		var minute = row.find('td:eq(2)').html().substring(3, 5);
+		var time = row.find('td:eq(2)').html().substring(5, 7);
+		var link = row.find('td:eq(3)').html();
 
-    	events.sort(function(a,b){
-			// Event date of month
-			var aDate = new Date(a.date).getTime();
-			var bDate = new Date(b.date).getTime();
-			// Event hours
-			var aHour = parseInt(a.time.slice(0,2), 10);
-			var bHour = parseInt(b.time.slice(0,2), 10);
-			// Event AM or PM
-			var aTime = a.time.slice(5,7);
-			var bTime = b.time.slice(5,7);
-			// Event minutes
-			var aMinute = parseInt(a.time.slice(3,5), 10);
-			var bMinute = parseInt(b.time.slice(3,5), 10);
-				
-			// Compare date of month and return if they are different
-			var result = aDate - bDate;
-			if(result !== 0){
-				return result;
-			}
+		jQuery('#event-title').val(title);
+		jQuery('#event-date').val(date);
+		jQuery('#event-hour').val(hour);
+		jQuery('#event-minute').val(minute);
+		jQuery('#event-time').val(time);
+		jQuery('#event-link').val(link);
+		
+		jQuery(window).scrollTop(0);
+		jQuery('#edit-event-buttons').css('display', 'block');
+		jQuery('#add-event-button').css('display', 'none');
 
-			// Add 12 hours on if time is PM
-			if(aTime == 'pm')
-				aHour += 12;
-			if(bTime == 'pm')
-				bHour += 12;
+		cancelButton();
+		saveButton(id);
+	});
+}
+
+function cancelButton(){
+	// When cancel button clicked, hide editing buttons and set input values to default
+	jQuery('#cancel-changes-event').click(function(){
+		jQuery('#edit-event-buttons').css('display', 'none');
+		jQuery('#add-event-button').css('display', 'block');
+		jQuery('#event-title').val('');
+		jQuery('#event-date').val('');
+		jQuery('#event-hour').val('01');
+		jQuery('#event-minute').val('00');
+		jQuery('#event-time').val('am');
+		jQuery('#event-link').val('');
+	});
+}
+
+function saveButton(id){
+	jQuery('#save-changes-event').click(function(){
+		// Get date from UI
+		var dateArray = jQuery('#event-date').val().split('/');
+		var event_date = dateArray[2] + '-' + dateArray[1] + '-' + dateArray[0];
 			
-			result = aHour - bHour;
-			// Compare hours and return if different
-			if(result !== 0){
-				return result;
+		// Get time from UI
+		var hours = jQuery('#event-hour').val();
+		var minutes = jQuery('#event-minute').val();
+		var time = jQuery('#event-time').val();
+		var event_time = hours + ':' + minutes + time;
+
+		// Get title from UI
+		var event_title = jQuery('#event-title').val();
+			
+		// Get link from UI
+		var event_link = jQuery('#event-link').val();
+
+		// When save changes button is clicked, save changes to the database
+		jQuery.post(belvajaxobject.ajax_url, {
+			_ajax_nonce: belvajaxobject.nonce,
+			action: 'belv_update_event',
+			id: id,
+			title: event_title,
+			date: event_date,
+			time: event_time,
+			link: event_link,
+		}, function(response, status){
+			if(status == 'success'){
+				alert('Event has been updated');
+				getEvent($, currentMonth, currentYear);
+			} else {
+				console.log('Error');
 			}
-			// Return difference of minutes
-			return aMinute - bMinute;
-    	});
-	}
-	
+		});
+		
+	});
+}
+
+function deleteLink(id){
+	jQuery('.delete-link').click( function() {
+		var row = jQuery(this).closest("tr");
+		var title = row.find('td:eq(0)').html();
+		var date = row.find('td:eq(1)').html();
+		var deleted = confirm("Are you sure you want to delete the event " + title + " on " + date);
+
+		if(deleted == true){
+			jQuery.post(belvajaxobject.ajax_url, {
+				_ajax_nonce: belvajaxobject.nonce,
+				action: 'belv_remove_event',
+				id: id,
+
+			})
+		}
+	});	
+}
+
+function sortEvents(events){
+
+   	events.sort(function(a,b){
+		// Event date of month
+		var aDate = new Date(a.date).getTime();
+		var bDate = new Date(b.date).getTime();
+		// Event hours
+		var aHour = parseInt(a.time.slice(0,2), 10);
+		var bHour = parseInt(b.time.slice(0,2), 10);
+		// Event AM or PM
+		var aTime = a.time.slice(5,7);
+		var bTime = b.time.slice(5,7);
+		// Event minutes
+		var aMinute = parseInt(a.time.slice(3,5), 10);
+		var bMinute = parseInt(b.time.slice(3,5), 10);
+			
+		// Compare date of month and return if they are different
+		var result = aDate - bDate;
+		if(result !== 0){
+			return result;
+		}
+
+		// Add 12 hours on if time is PM
+		if(aTime == 'pm')
+			aHour += 12;
+		if(bTime == 'pm')
+			bHour += 12;
+			
+		result = aHour - bHour;
+		// Compare hours and return if different
+		if(result !== 0){
+			return result;
+		}
+		// Return difference of minutes
+		return aMinute - bMinute;
+   	});
 }

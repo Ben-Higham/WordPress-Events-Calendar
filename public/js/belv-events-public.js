@@ -255,7 +255,6 @@ function showDay(dayNumber, events) {
 
 function mobileCalendar(month, year, events){
     var mobileContent = '';
-    console.log(events.length);
     if(events.length != 0){
         for(var e = 0; e < events.length; e++){
             mobileContent += '<tr><td><div class="image">';
