@@ -46,8 +46,8 @@ class Belv_Events_Data {
         $year = $params['year'];
 		$month = $params['month'];
         
-        $table_name = $wpdb->prefix . 'belv_calendar';
-		$sql_query = "SELECT * FROM $table_name where month(date) = $month AND year(date) = $year";
+        $table = $wpdb->prefix . 'belv_calendar';
+		$sql_query = "SELECT * FROM $table WHERE month(date) = $month AND year(date) = $year";
             
         $events =  $wpdb->get_results($sql_query);
 		return $events;
@@ -67,9 +67,9 @@ class Belv_Events_Data {
         $time = $_POST['time'];
         $link = $_POST['link'];
 		
-		$table_name = $wpdb->prefix . 'belv_calendar';
+		$table = $wpdb->prefix . 'belv_calendar';
 
-		$wpdb->insert($table_name,
+		$wpdb->insert($table,
 			array(
                 'title' => $title,
                 'date' => $date,
@@ -92,9 +92,9 @@ class Belv_Events_Data {
         $time = $_POST['time'];
 		$link = $_POST['link'];
 		
-		$table_name = $wpdb->prefix . 'belv_calendar';
+		$table = $wpdb->prefix . 'belv_calendar';
 
-		$wpdb->update( $table_name,
+		$wpdb->update( $table,
 			array(
                 'title' => $title,
                 'date' => $date,
@@ -108,26 +108,17 @@ class Belv_Events_Data {
 
 	public function belv_remove_event(){
 		
+		check_ajax_referer('calendar_nonce');
+
 		global $wpdb;
 
 		$id = $_POST['id'];
-		$title = $_POST['title'];
-        $date = $_POST['date'];
-        $time = $_POST['time'];
-		$link = $_POST['link'];
 
-		$table_name = $wpdb->prefix . 'belv_calendar';
+		$table = $wpdb->prefix . 'belv_calendar';
 
-		$wpdb->delete( $table_name,
-			array(
-				'id' => $id,
-				'title' => $title,
-				'date' => $date,
-				'time' => $time,
-				'link' => $link
-			)
+		$wpdb->delete( $table, array( 'id' => $id )	);
 
-		);
+		die();
 
 	}
 }

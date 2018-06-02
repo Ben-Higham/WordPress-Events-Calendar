@@ -134,7 +134,6 @@ function saveNewEvent($) {
 
 // Loads the events from the database for the month and year arguments
 function getEvent($, month, year) {
-	console.log(month);
 	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	jQuery.get( url, function( response ) {
 			updateContent(response)
@@ -148,7 +147,7 @@ function updateContent(response) {
 	var bodyContent = '';
 	if(response.length == 0) {
 		bodyContent = '<tr><td colspan="6" style="text-align: center;">No Events for this month</td></tr>';
-		jQuery('#belv-calendar-events').html(bodyContent);	
+		jQuery('#belv-calendar-events').html(bodyContent);
 	} else {
 		
 		sortEvents(response);
@@ -249,27 +248,33 @@ function saveButton(id){
 				alert('Event has been updated');
 				getEvent($, currentMonth, currentYear);
 			} else {
-				console.log('Error');
+				console.log('Error updating event');
 			}
 		});
 		
 	});
 }
 
-function deleteLink(id){
+function deleteLink(){
 	jQuery('.delete-link').click( function() {
 		var row = jQuery(this).closest("tr");
+		var id = row.attr("id").split('-')[1];
 		var title = row.find('td:eq(0)').html();
 		var date = row.find('td:eq(1)').html();
 		var deleted = confirm("Are you sure you want to delete the event " + title + " on " + date);
-
-		if(deleted == true){
+		if(deleted == true) {
 			jQuery.post(belvajaxobject.ajax_url, {
 				_ajax_nonce: belvajaxobject.nonce,
 				action: 'belv_remove_event',
 				id: id,
-
-			})
+			}, function(response, status) {
+				if(status == "success"){
+					alert('Event has been deleted');
+					getEvent($, currentMonth, currentYear);
+				} else {
+					console.log('Error deleting event ' + id);
+				}
+			});
 		}
 	});	
 }
