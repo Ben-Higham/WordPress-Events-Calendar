@@ -123,10 +123,10 @@ function saveNewEvent($) {
 			link: event_link,
 		}, function(response){
 			if(!response){
-				alert('Error');
+				toastr.warning('Error saving event', 'Error', {closeButton: true, timeOut: "4000"});
 			} else {
-				alert('Event has been added to the calendar');
-				getEvent($, dateArray[1], dateArray[2]);
+				toastr.success('Event has been added to the calendar', 'Success', {closeButton: true, timeOut: "4000"});
+				getEvent($, dateArray[1] - 1, dateArray[2]);
 			}
 		});
 	});
@@ -245,10 +245,10 @@ function saveButton(id){
 			link: event_link,
 		}, function(response, status){
 			if(status == 'success'){
-				alert('Event has been updated');
+				toastr.success('Event has been updated', 'Success', {closeButton: true, timeOut: "4000"});
 				getEvent($, currentMonth, currentYear);
 			} else {
-				console.log('Error updating event');
+				toastr.warning('Error updating event', 'Error', {closeButton: true, timeOut: "4000"});
 			}
 		});
 		
@@ -269,10 +269,10 @@ function deleteLink(){
 				id: id,
 			}, function(response, status) {
 				if(status == "success"){
-					alert('Event has been deleted');
+					toastr.success('Event has been deleted', 'Success', {closeButton: true, timeOut: "4000"});
 					getEvent($, currentMonth, currentYear);
 				} else {
-					console.log('Error deleting event ' + id);
+					toastr.warning('Error deleting event', 'Error', {closeButton: true, timeOut: "4000"});
 				}
 			});
 		}

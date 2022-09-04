@@ -7,13 +7,21 @@
   * Desktop styling
   */
 
- .belv-desk-month th {
+  table, td, th {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.belv-desk-month th {
     padding: 3px;
 	background-color: #3498DB;
 	color: #FFF;
 	text-shadow: 1px 1px #000;
 	border: 2px;
 	text-align: center;
+}
+.belv-desk-month {
+	font-size: 1.2em;
 }
 
 .belv-desk-days th {
@@ -29,16 +37,20 @@
 }
 
 .belv-desk-cell td {
-    height: 100px;
-    padding: 2px;
+    height: 120px;
+	padding: 2px;
+	vertical-align: top;
 }
 
 .belv-desk-blank {
 	background-color: #f2f2f2;
 }
 
-.belv-current-month {
-	font-size: large;
+#belv-mobile-calendar .belv-current-month,
+#belv-mobile-calendar .belv-next-month,
+#belv-mobile-calendar .belv-previous-month {
+	font-size: 1.5em;
+	font-weight: 500;
 }
 
 .belv-next-month:hover, .belv-previous-month:hover {
@@ -48,7 +60,8 @@
 }
 
 #belv-desk-calendar p {
-    font-size: 12px;
+    font-size: .9em;
+    margin: .2em 0;
 }
 
  /**
@@ -64,14 +77,14 @@
     border-right:0;
     border-top: 1px solid lightgrey;
     border-bottom: 0;
-    /* padding: 15px 10px 15px 10px; */
+    padding: 15px 10px 15px 10px;
 }
 
 .mobile-calendar-hr hr {
     margin: 0px 0;
 }
 
-.image {
+#belv-mobile-body .image {
     position: relative;
     float: left;
     width: 110px;
@@ -80,8 +93,8 @@
 .month {
     position: absolute;
     text-align: center;
-    bottom: 80px;
-    font-size: 125%;
+    bottom: 86px;
+    font-size: 1em;
     width: 100%;
     font-family: sans-serif;
     color: #ECF0F1;
@@ -90,36 +103,38 @@
     font-weight: 500;
 }
 
-.date {
+#belv-mobile-body .date {
     position: absolute;
     text-align: center;
-    top: 32px;
+    top: 22px;
     width: 100%;
-    font-size: 380%;
+    font-size: 3em;
     font-family: Arial, Helvetica, sans-serif;
     color: #2C3E52;
     padding: 0px;
     margin: 0px;
 }
 
-.day {
+#belv-mobile-body .day {
     left: 0;
     position: absolute;
     text-align: center;
-    top: 84px;
+    top: 78px;
     width: 100%;
-    font-size: 130%;
+    font-size: 1.1em;
     font-family: Arial, Helvetica, sans-serif;
     color: #2C3E52;
     padding: 0px;
     margin: 0px;
 }
 .mobile-calendar-time{
-    font-size: 16px;
+    font-size: 1.4em;
+    font-weight: 200;
 }
 
 .mobile-calendar-event{
-    font-size: 16px;
+    font-size: 1.4em;
+    font-weight: 300;
 }
 
 .calendar td {
@@ -143,21 +158,30 @@
 	}
 }
 
+@media screen and (max-width: 650px) {
+	.mobile-calendar-time {
+		font-size: 1.2em;
+	}
+	.mobile-calendar-event {
+		font-size: 1.2em;
+	}
+}
+
 @media screen and (max-width: 450px) {
-	.image {
+	#belv-mobile-body .image {
 		width:100px;
 	}
-	.date {
-		font-size: 350%;
-		top: 30px;
+	#belv-mobile-body .date {
+		font-size: 3em;
+		top: 18px;
 	}
-	.month {
-		font-size: 110%;
-		bottom: 74px;
+	#belv-mobile-body .month {
+		font-size: 1em;
+		bottom: 78px;
 	}
-	.day{
-		font-size: 120%;
-		top: 78px;
+	#belv-mobile-body .day{
+		font-size: 1em;
+		top: 75px;
 	}
 }
 
@@ -171,19 +195,91 @@
 	#belv-mobile-calendar td {
     	padding: 10px 4px 10px 4px;
 	}
-	.image {
+	#belv-mobile-body .image {
 		width:80px;
 	}
-	.date {
-		font-size: 260%;
-		top: 32%;
+	#belv-mobile-body .date {
+		font-size: 2em;
+		top: 20px;
 	}
-	.month {
-		font-size: 100%;
-		bottom: 74%;
+	#belv-mobile-body .month {
+		font-size: .8em;
+		bottom: 4rem;
 	}
-	.day{
-		font-size: 90%;
-		top: 78%;
+	#belv-mobile-body .day{
+		font-size: .8em;
+		top: 65%;
 	}
+}
+
+@media screen and (min-width: 800px) {
+    .upcoming-events-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .upcoming-events-grid {
+        grid-template-columns: 1fr;
+	}
+	.upcoming-event {
+		margin: 1rem auto;
+	}
+	.upcoming-events-grid {
+		margin: 0 0 1.5rem 0 !important;
+	}
+}
+
+#upcoming-meetings {
+	background: #fff;
+}
+
+#upcoming-meetings .homepage-wrapper {
+	max-width: 70rem;
+}
+
+.upcoming-events-grid {
+	grid-gap: var(--gutter);
+    margin: 3rem 0 1.5rem 0;
+    display: grid;
+}
+
+.upcoming-title p {
+	margin: 0;
+}
+
+.upcoming-icon {
+	margin-bottom: 1rem;
+}
+
+.upcoming-date {
+	width: 120px;
+	font-weight: bold;
+	font-size: 4rem;
+	margin: auto;
+	border: 1px solid #ddd;
+	border-bottom: 4px solid #ccc;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+	line-height: 1;
+	background: #eee;
+}
+
+.upcoming-month {
+	width: 120px;
+    font-size: 1.2rem;
+    margin: auto;
+    background: rgb(220, 73, 56);
+    color: white;
+	border-bottom: 4px solid rgb(183, 53, 39);
+	border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	padding-top: 2px;
+}
+
+.upcoming-day {
+	font-size: 1.2rem;
+	position: relative;
+    top: -4px;
+	font-weight: 500;
 }

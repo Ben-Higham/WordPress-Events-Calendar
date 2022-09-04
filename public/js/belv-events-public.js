@@ -53,7 +53,7 @@ jQuery(document).ready(function($) {
 	
 	getEvents($, currentMonth, currentYear);
 
-    $(".belv-previous-month").click(function(){
+    $(".belv-previous-month").on('click', function(){
         $("#belv-desk-body").html(loadingIcon);
         $("#belv-mobile-body").html(loadingIcon);
 
@@ -67,7 +67,7 @@ jQuery(document).ready(function($) {
         getEvents($, currentMonth, currentYear);
     });
     
-    $(".belv-next-month").click(function(){
+    $(".belv-next-month").on('click', function(){
         $("#belv-desk-body").html(loadingIcon);
         $("#belv-mobile-body").html(loadingIcon);
 
@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
 });
 
 function getEvents($, month, year) {
-	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
+	var url = document.location.origin + "/belvidere/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	$.get( url, function( data, status ) {
             updateCalendar($, month, year, data);
 		}
@@ -110,7 +110,7 @@ function updateCalendar($, month, year, events){
     // Update desktop calendar table with the events
 	$("#belv-desk-body").html(desktopCalendar(currentMonth, currentYear, events));
 
-    // Update desktop calendar table with the events
+    // Update mobile calendar table with the events
 	$("#belv-mobile-body").html(mobileCalendar(currentMonth, currentYear, events));
     
 }
@@ -198,6 +198,7 @@ function desktopCalendar(month, year, events){
         desktopContent += '</tr>'; 
     }
 
+
     return desktopContent;
 }
 
@@ -228,17 +229,32 @@ function showDay(dayNumber, events) {
     if (this.currentDay != 0 && this.currentDay <= this.daysInMonth){
         cellContent = currentDay;
         if(events[0] != 'No Events'){
-            for(var e = 0; e < events.length; e++){
-                if((events[e].date).slice(-2) == currentDay){
-                    cellContent += '<p><strong>' + events[e].time + '</strong> ';
-                    
-                    if(events[e].link != '') {
-                        cellContent += '<a href=\"' + events[e].link + '\">'  + events[e].title + '</a>';
+            if(events.length != 0) {
+                for(var e = 0; e < events.length; e++){
+                    if((events[e].date).slice(-2) == currentDay){
+                        cellContent += '<p><strong>' + events[e].time + '</strong> ';
+                        
+                        if(events[e].link != '') {
+                            cellContent += '<a href=\"' + events[e].link + '\">'  + events[e].title + '</a>';
+                        } else {
+                            cellContent += events[e].title;
+                        }
+                        
+                        cellContent += '</p>';
                     } else {
-                        cellContent += events[e].title;
+                        cellContent += 'nothing';
                     }
-                    
-                    cellContent += '</p>';
+                }
+            } else {
+                var dayNumber = new Date(currentYear, currentMonth, currentDay).getDay();
+                // Sunday default
+                if(dayNumber == 0) {
+                    cellContent += '<p><strong>10:15am</strong> Morning Service</p>';
+                    cellContent += '<p><strong>6:00pm</strong> Evening Service</p>';
+                }
+                // Wednesday default
+                if(dayNumber == 3) {
+                    cellContent += '<p><strong>8:00pm</strong> Bible Study & Prayer</p>';
                 }
             }
         }

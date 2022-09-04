@@ -130,22 +130,24 @@ class Belv_Events {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-belv-events-public.php';
 
 		/**
-		 * The class responsible for defining shortcodes
-		 * side of the site.
+		 * The class responsible for defining shortcodes.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-belv-events-shortcodes.php';
 
 		/**
-		 * The class responsible for defining REST API Endpoints
-		 * side of the site.
+		 * The class responsible for defining REST API Endpoints.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-belv-events-rest-api.php';
 
 		/**
-		 * The class responsible for defining REST API Endpoints
-		 * side of the site.
+		 * The class responsible for defining REST API Endpoints.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-belv-events-data.php';
+
+		/**
+		 * The class responsible for definining the Upcoming Events Widget
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-belv-events-widget-upcoming.php';
 
 		$this->loader = new Belv_Events_Loader();
 
@@ -188,6 +190,9 @@ class Belv_Events {
 
 		// Add Settings page
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_admin_menu' );
+
+		// Add Upcoming Events Widget
+		//$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_upcoming_events_widget' );
 
 		// Add Settings link to the plugin page
 		// $plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );

@@ -13,12 +13,12 @@
  * @package           Belv_Events
  *
  * @wordpress-plugin
- * Plugin Name:       Belvidere Events Calendar
- * Plugin URI:        http://belvidere.org.uk
- * Description:       This is the Belvidere Events Calendar
- * Version:           1.2.0
+ * Plugin Name:       Events Calendar
+ * Plugin URI:        http://benhigham.co.uk
+ * Description:       Allows events to be added and displayed on your WordPress site.
+ * Version:           1.4.0
  * Author:            Ben Higham
- * Author URI:        http://belvidere.org.uk
+ * Author URI:        http://benhigham.co.uk
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       belv-events

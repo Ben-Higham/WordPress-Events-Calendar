@@ -74,7 +74,7 @@ class Belv_Events_Admin {
 		 */
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/belv-events-admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'jquery_style', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
-
+		wp_enqueue_style( 'toastr_style', plugin_dir_url( __FILE__ ) . 'css/toastr.css' );
 	}
 
 	/**
@@ -97,7 +97,8 @@ class Belv_Events_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/belv-events-admin.js', array( 'jquery', 'jquery-ui-datepicker' ), $this->version, false );
-		
+		wp_enqueue_script( 'toastr', plugin_dir_url( __FILE__ ) . 'js/toastr.js' );
+
 		$calendar_nonce = wp_create_nonce('calendar_nonce');
 		wp_localize_script($this->plugin_name, 'belvajaxobject', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
@@ -111,7 +112,7 @@ class Belv_Events_Admin {
 		/*
 		* Add a settings page for this plugin to the Settings menu.
 		*/
-		add_menu_page( 'Belvidere Events Calendar', 'Belvidere Calendar', 'manage_options',
+		add_menu_page( 'Belvidere Events Calendar', 'Calendar', 'manage_options',
 						$this->plugin_name, array($this, 'display_plugin_setup_page'), 'dashicons-calendar-alt', 21
 		);
 
