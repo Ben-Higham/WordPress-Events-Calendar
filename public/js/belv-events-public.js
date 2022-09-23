@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
 });
 
 function getEvents($, month, year) {
-	var url = document.location.origin + "/belvidere/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
+	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	$.get( url, function( data, status ) {
         var days = new Date(year, month+1, 0).getDate();
         
