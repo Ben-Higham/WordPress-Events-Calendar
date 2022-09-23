@@ -87,14 +87,21 @@ function getEvents($, month, year) {
 	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	$.get( url, function( data, status ) {
         var days = new Date(year, month+1, 0).getDate();
+
+        // Exclude these dates
+        var excludeDates = [
+            { date: "2022-09-25", time: "06:00pm" },
+            { date: "2022-09-09", time: "10:15am" },
+            { date: "2022-09-09", time: "08:00pm" },
+        ];
         
         for(var day = 1; day <= days; day++) {
             var checkDate = year + '-' + String(month+1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
-
+            
             // Add Sunday services
             if(new Date(year, month, day).getDay() == 0) {
                 var morningService = data.find(event => event.date === checkDate && event.time === '10:15am');
-                var eveningService = data.find(event => event.date === checkDate && event.time === '6:00pm');
+                var eveningService = data.find(event => event.date === checkDate && event.time === '06:00pm');
                 if(!morningService) {
                     data.push({
                         date: checkDate,
@@ -112,9 +119,10 @@ function getEvents($, month, year) {
                     });
                 }
             }
+
             // Add Wednesday meetings
             if(new Date(year, month, day).getDay() == 3) {
-                var wednesdayMeeting = data.find(event => event.date === checkDate && event.time === '8:00pm');
+                var wednesdayMeeting = data.find(event => event.date === checkDate && event.time === '08:00pm');
                 if(!wednesdayMeeting) {
                     data.push({
                         date: checkDate,
@@ -124,6 +132,13 @@ function getEvents($, month, year) {
                     });
                 }
             }
+
+            excludeDates.forEach(function(exc) {
+                data = data.filter(function(obj) {
+                    return obj.time !== exc.time || obj.date !== exc.date;
+                });
+            });
+            
         }
         updateCalendar($, month, year, data);
 	});
