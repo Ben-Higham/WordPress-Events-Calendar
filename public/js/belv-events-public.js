@@ -86,10 +86,47 @@ jQuery(document).ready(function($) {
 function getEvents($, month, year) {
 	var url = document.location.origin + "/belvidere/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	$.get( url, function( data, status ) {
-            updateCalendar($, month, year, data);
-		}
-	)
+        var days = new Date(year, month+1, 0).getDate();
+        
+        for(var day = 1; day <= days; day++) {
+            var checkDate = year + '-' + String(month+1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
 
+            // Add Sunday services
+            if(new Date(year, month, day).getDay() == 0) {
+                var morningService = data.find(event => event.date === checkDate && event.time === '10:15am');
+                var eveningService = data.find(event => event.date === checkDate && event.time === '6:00pm');
+                if(!morningService) {
+                    data.push({
+                        date: checkDate,
+                        link: "",
+                        time: "10:15am",
+                        title: "Morning Service"
+                    });
+                }
+                if(!eveningService) {
+                    data.push({
+                        date: checkDate,
+                        link: "",
+                        time: "06:00pm",
+                        title: "Evening Service"
+                    });
+                }
+            }
+            // Add Wednesday meetings
+            if(new Date(year, month, day).getDay() == 3) {
+                var wednesdayMeeting = data.find(event => event.date === checkDate && event.time === '8:00pm');
+                if(!wednesdayMeeting) {
+                    data.push({
+                        date: checkDate,
+                        link: "",
+                        time: "08:00pm",
+                        title: "Bible Study & Prayer"
+                    });
+                }
+            }
+        }
+        updateCalendar($, month, year, data);
+	});
 }
 
 function updateCalendar($, month, year, events){
@@ -192,7 +229,7 @@ function desktopCalendar(month, year, events){
     
     for (var week = 0; week < this.weeksInMonth; week++){
         desktopContent += '<tr class="belv-desk-cell" id="belv-desk-week-' + week.toString() + '">';
-        for (var day = 0; day < 7; day++){
+        for (var day = 0; day < 7; day++) {
             desktopContent += showDay(week * 7 + day, events);
         }
         desktopContent += '</tr>'; 
@@ -228,10 +265,10 @@ function showDay(dayNumber, events) {
     
     if (this.currentDay != 0 && this.currentDay <= this.daysInMonth){
         cellContent = currentDay;
-        if(events[0] != 'No Events'){
+        if(events[0] != 'No Events') {
             if(events.length != 0) {
                 for(var e = 0; e < events.length; e++){
-                    if((events[e].date).slice(-2) == currentDay){
+                    if((events[e].date).slice(-2) == currentDay) {
                         cellContent += '<p><strong>' + events[e].time + '</strong> ';
                         
                         if(events[e].link != '') {
@@ -241,20 +278,7 @@ function showDay(dayNumber, events) {
                         }
                         
                         cellContent += '</p>';
-                    } else {
-                        cellContent += 'nothing';
                     }
-                }
-            } else {
-                var dayNumber = new Date(currentYear, currentMonth, currentDay).getDay();
-                // Sunday default
-                if(dayNumber == 0) {
-                    cellContent += '<p><strong>10:15am</strong> Morning Service</p>';
-                    cellContent += '<p><strong>6:00pm</strong> Evening Service</p>';
-                }
-                // Wednesday default
-                if(dayNumber == 3) {
-                    cellContent += '<p><strong>8:00pm</strong> Bible Study & Prayer</p>';
                 }
             }
         }
