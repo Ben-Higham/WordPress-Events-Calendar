@@ -37,7 +37,7 @@ class Belv_Events_Shortcodes {
     public function belv_calendar_shortcode(){
 
         // Load Javascript when shortcode is called
-        //wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/belv-events-public.js', array( 'jquery' ), $this->version, true );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/belv-events-public.js', array( 'jquery' ), $this->version, true );
 
         ob_start();
         ?>

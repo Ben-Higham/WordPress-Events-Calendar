@@ -96,7 +96,7 @@ class Belv_Events_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/belv-events-public.js', array( 'jquery' ), $this->version, true );
+		//wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/belv-events-public.js', array( 'jquery' ), $this->version, true );
 
     	$calendar_nonce = wp_create_nonce('calendar_nonce');
     	wp_localize_script( $this->plugin_name, 'ajaxobject', array(
