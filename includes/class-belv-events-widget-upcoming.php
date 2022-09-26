@@ -32,28 +32,19 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
         $events =  $wpdb->get_results($sql_query);
         $upcoming = array();
 
+        // Exclude these dates
+        $exclude_dates = array(
+            date("Y-m-d H:i", strtotime('2022-09-25 06:00PM')),
+            date("Y-m-d H:i", strtotime('2022-10-02 10:15AM')),
+            date("Y-m-d H:i", strtotime('2022-10-02 06:00PM'))
+        );
+
         // Get date of next Sunday
         if(date('D') == 'Sun') {
             $sunday_date = date("Y-m-d");
         } else {
             $sunday_date = date("Y-m-d", strtotime('next sunday'));
         }
-
-        array_push($upcoming, array(
-            "title" => 'Morning Service',
-            "date" => $sunday_date,
-            "time" => '10:15am',
-            "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '10:15AM')),
-            "link" => '',
-        ));
-
-        array_push($upcoming, array(
-            "title" => 'Evening Service',
-            "date" => $sunday_date,
-            "time" => '6:00pm',
-            "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '06:00PM')),
-            "link" => '',
-        ));
 
         // Get date of next Wednesday
         if(date('D') == 'Wed') {
@@ -62,14 +53,7 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
             $wednesday_date = date("Y-m-d", strtotime('next wednesday'));
         }
 
-        array_push($upcoming, array(
-            "title" => 'Bible Study & Prayer',
-            "date" => $wednesday_date,
-            "time" => '8:00pm',
-            "datetime" => date("Y-m-d H:i", strtotime($wednesday_date . '8:00PM')),
-            "link" => '',
-        ));
-
+        // Get events from database
         foreach ($events as $event) {
             $newevent = array(
                 "title" => $event->title,
@@ -80,7 +64,81 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
             );
             array_push($upcoming, $newevent);
         }
+        
+        // Check which events are currently set in database
+        $morning_service = 'false';
+        $evening_service = 'false';
+        $bible_study = 'false';
 
+        foreach($upcoming as $item) {
+            if(isset($item['datetime']) && $item['datetime'] == date("Y-m-d H:i", strtotime($sunday_date . '10:15AM'))) {
+                $morning_service = 'true';
+            }
+            if(isset($item['datetime']) && $item['datetime'] == date("Y-m-d H:i", strtotime($sunday_date . '06:00PM'))) {
+                $evening_service = 'true';
+            }
+            if(isset($item['datetime']) && $item['datetime'] == date("Y-m-d H:i", strtotime($wednesday_date . '08:00PM'))) {
+                $bible_study = 'true';
+            }
+        }
+        
+        // If no event, add them to list
+        if($morning_service == 'false' && !in_array(date("Y-m-d H:i", strtotime($sunday_date . '10:15AM')), $exclude_dates)) {
+            array_push($upcoming, array(
+                "title" => 'Morning Service',
+                "date" => $sunday_date,
+                "time" => '10:15am',
+                "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '10:15AM')),
+                "link" => '',
+            ));
+        }
+
+        if($evening_service == 'false' && !in_array(date("Y-m-d H:i", strtotime($sunday_date . '06:00PM')), $exclude_dates)) {
+            array_push($upcoming, array(
+                "title" => 'Evening Service',
+                "date" => $sunday_date,
+                "time" => '6:00pm',
+                "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '06:00PM')),
+                "link" => '',
+            ));
+        }
+
+        if($bible_study == 'false' && !in_array(date("Y-m-d H:i", strtotime($wednesday_date . '08:00PM')), $exclude_dates)) {
+            array_push($upcoming, array(
+                "title" => 'Bible Study & Prayer',
+                "date" => $wednesday_date,
+                "time" => '8:00pm',
+                "datetime" => date("Y-m-d H:i", strtotime($wednesday_date . '8:00PM')),
+                "link" => '',
+            ));
+        }
+
+        if(count($upcoming) < 3) {
+            $date = strtotime($sunday_date);
+            $date = strtotime("+7 day", $date);
+            $sunday_date = date("Y-m-d", $date);
+            if(!in_array(date("Y-m-d H:i", strtotime($sunday_date . '10:15AM')), $exclude_dates)) {
+                array_push($upcoming, array(
+                    "title" => 'Morning Service',
+                    "date" => $sunday_date,
+                    "time" => '10:15am',
+                    "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '10:15AM')),
+                    "link" => '',
+                ));
+            }
+    
+            if(!in_array(date("Y-m-d H:i", strtotime($sunday_date . '06:00PM')), $exclude_dates)) {
+                array_push($upcoming, array(
+                    "title" => 'Evening Service',
+                    "date" => $sunday_date,
+                    "time" => '6:00pm',
+                    "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '06:00PM')),
+                    "link" => '',
+                ));
+            }
+        }
+
+        // Order dates
         function date_compare($a, $b)
         {
             $t1 = strtotime($a['datetime']);
