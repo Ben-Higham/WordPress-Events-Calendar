@@ -93,6 +93,7 @@ function getEvents($, month, year) {
             { date: "2022-09-25", time: "06:00pm" },
             { date: "2022-10-09", time: "10:15am" },
             { date: "2022-10-09", time: "06:00pm" },
+            { date: "2022-12-25", time: "06:00pm" },
         ];
         
         for(var day = 1; day <= days; day++) {
