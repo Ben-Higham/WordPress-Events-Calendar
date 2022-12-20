@@ -73,7 +73,7 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
         array_push($upcoming, array(
             "title" => 'Bible Study & Prayer',
             "date" => $wednesday_date,
-            "time" => '08:00pm',
+            "time" => '8:00pm',
             "datetime" => date("Y-m-d H:i", strtotime($wednesday_date . '8:00PM')),
             "link" => '',
         ));
