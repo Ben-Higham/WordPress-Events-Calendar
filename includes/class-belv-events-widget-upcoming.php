@@ -38,7 +38,6 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
             array( "date" => "2022-10-09", "time" => "10:15am" ),
             array( "date" => "2022-10-09", "time" => "06:00pm" ),
             array( "date" => "2022-12-25", "time" => "06:00pm" ),
-            array( "date" => "2023-12-31", "time" => "06:00pm" ),
         );
 
         // Get date of next Sunday
@@ -47,6 +46,22 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
         } else {
             $sunday_date = date("Y-m-d", strtotime('next sunday'));
         }
+
+        array_push($upcoming, array(
+            "title" => 'Morning Service',
+            "date" => $sunday_date,
+            "time" => '10:15am',
+            "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '10:15AM')),
+            "link" => '',
+        ));
+
+        array_push($upcoming, array(
+            "title" => 'Evening Service',
+            "date" => $sunday_date,
+            "time" => '06:00pm',
+            "datetime" => date("Y-m-d H:i", strtotime($sunday_date . '06:00PM')),
+            "link" => '',
+        ));
 
         array_push($upcoming, array(
             "title" => 'Morning Service',
@@ -79,6 +94,14 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
             "link" => '',
         ));
 
+        array_push($upcoming, array(
+            "title" => 'Bible Study & Prayer',
+            "date" => $wednesday_date,
+            "time" => '8:00pm',
+            "datetime" => date("Y-m-d H:i", strtotime($wednesday_date . '8:00PM')),
+            "link" => '',
+        ));
+
         foreach ($events as $event) {
             $newevent = array(
                 "title" => $event->title,
@@ -89,6 +112,12 @@ class Belv_Upcoming_Events_Widget extends WP_Widget
             );
             array_push($upcoming, $newevent);
         }
+
+        foreach($upcoming as $upKey => $event) {
+            foreach($excludeDates as $date) {
+                if($event['date'] == $date['date'] && $event['time'] == $date['time']) {
+                    unset($upcoming[$upKey]);
+                }
 
         foreach($upcoming as $upKey => $event) {
             foreach($excludeDates as $date) {
