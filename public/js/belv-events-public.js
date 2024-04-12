@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
 });
 
 function getEvents($, month, year) {
-	var url = document.location.origin + "/belvidere/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
+	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	$.get( url, function( data, status ) {
         var days = new Date(year, month+1, 0).getDate();
 
@@ -93,6 +93,8 @@ function getEvents($, month, year) {
             { date: "2022-09-25", time: "06:00pm" },
             { date: "2022-10-09", time: "10:15am" },
             { date: "2022-10-09", time: "06:00pm" },
+            { date: "2022-12-25", time: "06:00pm" },
+            { date: "2023-12-31", time: "06:00pm" },            
         ];
         
         for(var day = 1; day <= days; day++) {

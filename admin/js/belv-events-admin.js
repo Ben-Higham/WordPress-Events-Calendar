@@ -134,7 +134,7 @@ function saveNewEvent($) {
 
 // Loads the events from the database for the month and year arguments
 function getEvent($, month, year) {
-	var url = document.location.origin + "/belvidere/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
+	var url = document.location.origin + "/wp-json/belv-events/v1/events/" + (month + 1) + "/" + year;
 	jQuery.get( url, function( response ) {
 			updateContent(response)
 		}
